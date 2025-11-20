@@ -1,0 +1,73 @@
+// Estruturas basicas e dados para teste
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_PRODUTOS 50
+
+typedef struct {
+    int codigo;
+    char nome[50];
+    char categoria[30];
+    float preco;
+    int quantidade;
+    int estoque_minimo;
+} Produto;
+
+Produto produtos[MAX_PRODUTOS];
+int total_produtos = 0;
+
+void carregarDadosExemplo() {
+    Produto exemplos[] = {
+        {1, "Notebook Dell", "Eletronicos", 2500.00, 5, 2},
+        {2, "Mouse Logitech", "Eletronicos", 89.90, 15, 5},
+        {3, "Teclado Mecanico", "Eletronicos", 199.90, 8, 3},
+        {4, "Caderno Universitario", "Papelaria", 24.90, 50, 10},
+        {5, "Caneta Esferografica", "Papelaria", 2.50, 200, 50}
+    };
+    
+    total_produtos = 5;
+    for(int i = 0; i < total_produtos; i++) {
+        produtos[i] = exemplos[i];
+    }
+}
+
+void limparBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
+void mostrarMenu() {
+    printf("\n=== SISTEMA DE ESTOQUE ===\n");
+    printf("1. Listar Produtos\n");
+    printf("0. Sair\n");
+    printf("Escolha uma opcao: ");
+}
+
+int main() {
+    carregarDadosExemplo();
+    
+    printf("SISTEMA DE CONTROLE DE ESTOQUE\n");
+    printf("%d produtos carregados\n\n", total_produtos);
+    
+    int opcao;
+    
+    do {
+        mostrarMenu();
+        scanf("%d", &opcao);
+        limparBuffer();
+        
+        if(opcao == 1) {
+            printf("\nLista de produtos em desenvolvimento...\n");
+        } else if(opcao == 0) {
+            printf("Saindo...\n");
+        } else {
+            printf("Opcao invalida!\n");
+        }
+        
+    } while(opcao != 0);
+    
+    return 0;
+}
+
+

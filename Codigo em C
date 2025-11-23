@@ -1,4 +1,5 @@
 // Estruturas basicas e dados para teste
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

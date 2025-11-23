@@ -70,4 +70,51 @@ int main() {
     return 0;
 }
 
+void listarProdutos() {
+    printf("\n=== LISTA DE PRODUTOS ===\n");
+    for(int i = 0; i < total_produtos; i++) {
+        printf("%d. %s | %s | R$ %.2f | %d unidades\n",
+               produtos[i].codigo,
+               produtos[i].nome,
+               produtos[i].categoria,
+               produtos[i].preco,
+               produtos[i].quantidade);
+    }
+}
+
+void mostrarMenu() {
+    printf("\n=== SISTEMA DE ESTOQUE ===\n");
+    printf("1. Listar Produtos\n");
+    printf("0. Sair\n");
+    printf("Escolha uma opcao: ");
+}
+
+int main() {
+    carregarDadosExemplo();
+    
+    printf("SISTEMA DE CONTROLE DE ESTOQUE\n");
+    printf("%d produtos carregados\n\n", total_produtos);
+    
+    int opcao;
+    
+    do {
+        mostrarMenu();
+        scanf("%d", &opcao);
+        limparBuffer();
+        
+        switch(opcao) {
+            case 1:
+                listarProdutos();
+                break;
+            case 0:
+                printf("Saindo...\n");
+                break;
+            default:
+                printf("Opcao invalida!\n");
+        }
+        
+    } while(opcao != 0);
+    
+    return 0;
+}
 

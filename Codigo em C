@@ -70,6 +70,8 @@ int main() {
     return 0;
 }
 
+// Sistema de listagem
+
 void listarProdutos() {
     printf("\n=== LISTA DE PRODUTOS ===\n");
     for(int i = 0; i < total_produtos; i++) {

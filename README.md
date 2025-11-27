@@ -45,10 +45,15 @@ Objetivos do Projeto
 
 Tecnologias e Conceitos Utilizados
 
-Linguagem e Compilação
-- **Linguagem**: C (padrão C99)
-- **Compilador**: GCC
-- **Sistema**: Cross-platform (Windows/Linux/Mac)
+Ambiente de Desenvolvimento e Execução
+
+- Linguagem: C (padrão C99)
+- Ambiente de Teste: GDB Online
+- Compilador: GCC  
+- Plataforma: Desenvolvido e testado no GDB Online Compiler
+
+Nota: Este projeto foi desenvolvido e testado especificamente no GDB Online Compiler, garantindo total funcionamento nesse ambiente. O código segue o padrão C99 para máxima compatibilidade.   https://www.onlinegdb.com/edit/iJpIyWc-NT 
+
 
 Conceitos Aplicados da Disciplina
 

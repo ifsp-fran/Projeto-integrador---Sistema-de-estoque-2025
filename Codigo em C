@@ -156,3 +156,36 @@ void mostrarMenu() {
     printf("Escolha uma opcao: ");
 }
 
+//Organizaçao por Categorias
+
+void produtosPorCategoria() {
+    printf("\n=== PRODUTOS POR CATEGORIA ===\n");
+    
+    char categorias[10][30];
+    int total_cats = 0;
+    
+    for(int i = 0; i < total_produtos; i++) {
+        int encontrou = 0;
+        for(int j = 0; j < total_cats; j++) {
+            if(strcmp(produtos[i].categoria, categorias[j]) == 0) {
+                encontrou = 1;
+                break;
+            }
+        }
+        if(!encontrou && total_cats < 10) {
+            strcpy(categorias[total_cats], produtos[i].categoria);
+            total_cats++;
+        }
+    }
+    
+    for(int i = 0; i < total_cats; i++) {
+        printf("\n%s:\n", categorias[i]);
+        for(int j = 0; j < total_produtos; j++) {
+            if(strcmp(produtos[j].categoria, categorias[i]) == 0) {
+                printf("  - %s\n", produtos[j].nome);
+            }
+        }
+    }
+}
+
+

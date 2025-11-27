@@ -188,4 +188,55 @@ void produtosPorCategoria() {
     }
 }
 
+// Controle de estoque / Atualizacoes
+
+void atualizarEstoque() {
+    int codigo, quantidade;
+    char operacao;
+    
+    printf("\n=== ATUALIZAR ESTOQUE ===\n");
+    printf("Codigo do produto: ");
+    scanf("%d", &codigo);
+    
+    int indice = -1;
+    for(int i = 0; i < total_produtos; i++) {
+        if(produtos[i].codigo == codigo) {
+            indice = i;
+            break;
+        }
+    }
+    
+    if(indice == -1) {
+        printf("Produto nao encontrado!\n");
+        limparBuffer();
+        return;
+    }
+    
+    printf("Produto: %s\n", produtos[indice].nome);
+    printf("Estoque atual: %d unidades\n", produtos[indice].quantidade);
+    printf("Operacao (+ = entrada, - = saida): ");
+    scanf(" %c", &operacao);
+    printf("Quantidade: ");
+    scanf("%d", &quantidade);
+    limparBuffer();
+    
+    if(operacao == '+') {
+        produtos[indice].quantidade += quantidade;
+        printf("Entrada realizada! Novo estoque: %d\n", produtos[indice].quantidade);
+    } else if(operacao == '-') {
+        if(quantidade > produtos[indice].quantidade) {
+            printf("Estoque insuficiente! Disponivel: %d\n", produtos[indice].quantidade);
+        } else {
+            produtos[indice].quantidade -= quantidade;
+            printf("Saida realizada! Novo estoque: %d\n", produtos[indice].quantidade);
+        }
+    } else {
+        printf("Operacao invalida! Use + ou -\n");
+    }
+}
+
+
+
+
+
 

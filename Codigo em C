@@ -235,6 +235,47 @@ void atualizarEstoque() {
     }
 }
 
+// Modulo para Relatorios e Status
+
+void relatorioEstoqueBaixo() {
+    printf("\n=== PRODUTOS COM ESTOQUE BAIXO ===\n");
+    int alertas = 0;
+    
+    for(int i = 0; i < total_produtos; i++) {
+        if(produtos[i].quantidade <= produtos[i].estoque_minimo) {
+            printf("%s - %d unidades (minimo: %d)\n",
+                   produtos[i].nome,
+                   produtos[i].quantidade,
+                   produtos[i].estoque_minimo);
+            alertas++;
+        }
+    }
+    
+    if(alertas == 0) {
+        printf("Nenhum produto com estoque baixo!\n");
+    }
+}
+
+// [Atualizar listarProdutos para mostrar status]
+void listarProdutos() {
+    printf("\n=== LISTA DE PRODUTOS ===\n");
+    for(int i = 0; i < total_produtos; i++) {
+        char status[10];
+        if(produtos[i].quantidade == 0) strcpy(status, "ESGOTADO");
+        else if(produtos[i].quantidade <= produtos[i].estoque_minimo) strcpy(status, "BAIXO");
+        else strcpy(status, "OK");
+        
+        printf("%d. %s | %s | R$ %.2f | %d un [%s]\n",
+               produtos[i].codigo,
+               produtos[i].nome,
+               produtos[i].categoria,
+               produtos[i].preco,
+               produtos[i].quantidade,
+               status);
+    }
+}
+
+
 
 
 

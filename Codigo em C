@@ -275,6 +275,296 @@ void listarProdutos() {
     }
 }
 
+// CODIGO FINAL
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_PRODUTOS 50
+
+typedef struct {
+    int codigo;
+    char nome[50];
+    char categoria[30];
+    float preco;
+    int quantidade;
+    int estoque_minimo;
+} Produto;
+
+Produto produtos[MAX_PRODUTOS];
+int total_produtos = 0;
+
+void carregarDadosExemplo() {
+    Produto exemplos[] = {
+        {1, "Notebook Dell", "Eletronicos", 2500.00, 5, 2},
+        {2, "Mouse Logitech", "Eletronicos", 89.90, 15, 5},
+        {3, "Teclado Mecanico", "Eletronicos", 199.90, 8, 3},
+        {4, "Caderno Universitario", "Papelaria", 24.90, 50, 10},
+        {5, "Caneta Esferografica", "Papelaria", 2.50, 200, 50},
+        {6, "Livro C Programming", "Livros", 89.90, 12, 5},
+        {7, "Monitor 24 polegadas", "Eletronicos", 899.90, 3, 2},
+        {8, "Cafe em Po", "Alimentos", 15.90, 30, 15},
+        {9, "Agenda 2024", "Papelaria", 35.90, 25, 8},
+        {10, "Fone de Ouvido", "Eletronicos", 159.90, 10, 4}
+    };
+    
+    total_produtos = 10;
+    for(int i = 0; i < total_produtos; i++) {
+        produtos[i] = exemplos[i];
+    }
+}
+
+void limparBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
+void listarProdutos() {
+    printf("\n=== LISTA DE PRODUTOS ===\n");
+    for(int i = 0; i < total_produtos; i++) {
+        char status[10];
+        if(produtos[i].quantidade == 0) strcpy(status, "ESGOTADO");
+        else if(produtos[i].quantidade <= produtos[i].estoque_minimo) strcpy(status, "BAIXO");
+        else strcpy(status, "OK");
+        
+        printf("%2d. %-20s %-12s R$ %7.2f %3d un. [%s]\n",
+               produtos[i].codigo,
+               produtos[i].nome,
+               produtos[i].categoria,
+               produtos[i].preco,
+               produtos[i].quantidade,
+               status);
+    }
+}
+
+void buscarProduto() {
+    char termo[50];
+    printf("\nDigite o nome do produto: ");
+    scanf("%49s", termo);
+    limparBuffer();
+    
+    printf("\n🔍 Resultados para '%s':\n", termo);
+    int encontrados = 0;
+    
+    for(int i = 0; i < total_produtos; i++) {
+        if(strstr(produtos[i].nome, termo) != NULL) {
+            printf("✅ %s | %s | R$ %.2f | %d unidades\n",
+                   produtos[i].nome,
+                   produtos[i].categoria,
+                   produtos[i].preco,
+                   produtos[i].quantidade);
+            encontrados++;
+        }
+    }
+    
+    if(encontrados == 0) {
+        printf("❌ Nenhum produto encontrado.\n");
+    } else {
+        printf("📊 Total encontrado: %d produto(s)\n", encontrados);
+    }
+}
+
+void produtosPorCategoria() {
+    printf("\n=== PRODUTOS POR CATEGORIA ===\n");
+    
+    char categorias[10][30];
+    int total_cats = 0;
+    
+    for(int i = 0; i < total_produtos; i++) {
+        int encontrou = 0;
+        for(int j = 0; j < total_cats; j++) {
+            if(strcmp(produtos[i].categoria, categorias[j]) == 0) {
+                encontrou = 1;
+                break;
+            }
+        }
+        if(!encontrou && total_cats < 10) {
+            strcpy(categorias[total_cats], produtos[i].categoria);
+            total_cats++;
+        }
+    }
+    
+    for(int i = 0; i < total_cats; i++) {
+        printf("\n📁 %s:\n", categorias[i]);
+        for(int j = 0; j < total_produtos; j++) {
+            if(strcmp(produtos[j].categoria, categorias[i]) == 0) {
+                printf("   📦 %s (R$ %.2f)\n", produtos[j].nome, produtos[j].preco);
+            }
+        }
+    }
+}
+
+void relatorioEstoqueBaixo() {
+    printf("\n=== PRODUTOS COM ESTOQUE BAIXO ===\n");
+    int alertas = 0;
+    
+    for(int i = 0; i < total_produtos; i++) {
+        if(produtos[i].quantidade <= produtos[i].estoque_minimo) {
+            printf("🚨 %s - %d unidades (mínimo: %d)\n",
+                   produtos[i].nome,
+                   produtos[i].quantidade,
+                   produtos[i].estoque_minimo);
+            alertas++;
+        }
+    }
+    
+    if(alertas == 0) {
+        printf("✅ Nenhum produto com estoque baixo!\n");
+    } else {
+        printf("\n📈 Total de alertas: %d\n", alertas);
+    }
+}
+
+void atualizarEstoque() {
+    int codigo, quantidade;
+    char operacao;
+    
+    printf("\n=== ATUALIZAR ESTOQUE ===\n");
+    printf("Código do produto: ");
+    scanf("%d", &codigo);
+    
+    int indice = -1;
+    for(int i = 0; i < total_produtos; i++) {
+        if(produtos[i].codigo == codigo) {
+            indice = i;
+            break;
+        }
+    }
+    
+    if(indice == -1) {
+        printf("❌ Produto não encontrado!\n");
+        limparBuffer();
+        return;
+    }
+    
+    printf("Produto: %s\n", produtos[indice].nome);
+    printf("Estoque atual: %d unidades\n", produtos[indice].quantidade);
+    printf("Operação (+ = entrada, - = saída): ");
+    scanf(" %c", &operacao);
+    printf("Quantidade: ");
+    scanf("%d", &quantidade);
+    limparBuffer();
+    
+    if(operacao == '+') {
+        produtos[indice].quantidade += quantidade;
+        printf("✅ Entrada realizada!\n");
+        printf("📦 Novo estoque: %d unidades\n", produtos[indice].quantidade);
+    } else if(operacao == '-') {
+        if(quantidade > produtos[indice].quantidade) {
+            printf("❌ Estoque insuficiente! Disponível: %d\n", produtos[indice].quantidade);
+        } else {
+            produtos[indice].quantidade -= quantidade;
+            printf("✅ Saída realizada!\n");
+            printf("📦 Novo estoque: %d unidades\n", produtos[indice].quantidade);
+        }
+    } else {
+        printf("❌ Operação inválida! Use + ou -\n");
+    }
+}
+
+void cadastrarProduto() {
+    if(total_produtos >= MAX_PRODUTOS) {
+        printf("❌ Limite máximo de produtos atingido!\n");
+        return;
+    }
+    
+    Produto novo;
+    
+    printf("\n=== CADASTRAR NOVO PRODUTO ===\n");
+    novo.codigo = total_produtos + 1;
+    printf("Código automático: %d\n", novo.codigo);
+    
+    printf("Nome: ");
+    scanf("%49s", novo.nome);
+    printf("Categoria: ");
+    scanf("%29s", novo.categoria);
+    printf("Preço: R$ ");
+    scanf("%f", &novo.preco);
+    printf("Quantidade: ");
+    scanf("%d", &novo.quantidade);
+    printf("Estoque mínimo: ");
+    scanf("%d", &novo.estoque_minimo);
+    limparBuffer();
+    
+    produtos[total_produtos] = novo;
+    total_produtos++;
+    
+    printf("\n🎉 PRODUTO CADASTRADO COM SUCESSO!\n");
+    printf("📝 Dados: %s | %s | R$ %.2f | %d unidades\n", 
+           novo.nome, novo.categoria, novo.preco, novo.quantidade);
+}
+
+void mostrarMenu() {
+    printf("\n┌──────────────────────────────────┐\n");
+    printf("│      🏪 SISTEMA DE ESTOQUE      │\n");
+    printf("├──────────────────────────────────┤\n");
+    printf("│ 1. 📋 Listar Produtos           │\n");
+    printf("│ 2. 🔍 Buscar Produto            │\n");
+    printf("│ 3. 📁 Produtos por Categoria    │\n");
+    printf("│ 4. 🚨 Relatório Estoque Baixo   │\n");
+    printf("│ 5. 📦 Atualizar Estoque         │\n");
+    printf("│ 6. 📥 Cadastrar Novo Produto    │\n");
+    printf("│ 0. 🚪 Sair                      │\n");
+    printf("└──────────────────────────────────┘\n");
+    printf("👉 Escolha uma opção (0-6): ");
+}
+
+int main() {
+    carregarDadosExemplo();
+    
+    printf("=========================================\n");
+    printf("    SISTEMA DE CONTROLE DE ESTOQUE\n");
+    printf("     Desenvolvido em Linguagem C\n");
+    printf("=========================================\n");
+    printf("✅ %d produtos carregados para teste\n\n", total_produtos);
+    
+    int opcao;
+    
+    do {
+        mostrarMenu();
+        scanf("%d", &opcao);
+        limparBuffer();
+        
+        switch(opcao) {
+            case 1:
+                listarProdutos();
+                break;
+            case 2:
+                buscarProduto();
+                break;
+            case 3:
+                produtosPorCategoria();
+                break;
+            case 4:
+                relatorioEstoqueBaixo();
+                break;
+            case 5:
+                atualizarEstoque();
+                break;
+            case 6:
+                cadastrarProduto();
+                break;
+            case 0:
+                printf("\n👋 Obrigado por usar o sistema! Até logo!\n");
+                break;
+            default:
+                printf("\n❌ Opção inválida! Digite um número entre 0 e 6.\n");
+        }
+        
+        if(opcao != 0) {
+            printf("\n⏰ Pressione Enter para continuar...");
+            getchar();
+        }
+        
+    } while(opcao != 0);
+    
+    printf("\n=========================================\n");
+    printf("    PROJETO CONCLUÍDO COM SUCESSO!\n");
+    printf("=========================================\n");
+    
+    return 0;
+}
 
 
 
